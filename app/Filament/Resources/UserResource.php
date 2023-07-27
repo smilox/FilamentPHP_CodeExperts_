@@ -5,6 +5,7 @@ namespace App\Filament\Resources;
 use App\Filament\Resources\UserResource\Pages;
 use App\Filament\Resources\UserResource\RelationManagers;
 use App\Models\User;
+use Filament\Facades\Filament;
 use Filament\Forms;
 use Filament\Forms\Components\TextInput;
 use Filament\Resources\Form;
@@ -28,15 +29,15 @@ class UserResource extends Resource
             ->schema([
                 TextInput::make('name')->required()->label('Nome'),
                 TextInput::make('email')->required()->email()->label('E-mail'),
-                TextInput::make('password')
-                        ->password()
-                        ->required()
-                        ->rules([Password::default()]),
-                TextInput::make('password_confirmation')
-                        ->password()
-                        ->required()
-                        ->same('password')
-                        ->rules([Password::default()])
+                // TextInput::make('password')
+                //         ->password()
+                //         ->required()
+                //         ->rules([Password::default()]),
+                // TextInput::make('password_confirmation')
+                //         ->password()
+                //         ->required()
+                //         ->same('password')
+                //         ->rules([Password::default()])
             ]);
     }
 
@@ -53,6 +54,24 @@ class UserResource extends Resource
             ])
             ->actions([
                 Tables\Actions\EditAction::make(),
+                Tables\Actions\Action::make('change_password')
+                ->form([
+                    TextInput::make('password')
+                        ->password()
+                        ->required()
+                        ->rules([Password::default()]),
+                    TextInput::make('password_confirmation')
+                        ->password()
+                        ->required()
+                        ->same('password')
+                        ->rules([Password::default()])
+                ])
+                ->action(function (User $record, array $data) {
+                    $record->update([
+                        'password' => bcrypt($data['password'])
+                    ]);
+                    Filament::notify('success','Senha atualizada com sucesso!');
+                }),
             ])
             ->bulkActions([
                 // Tables\Actions\DeleteBulkAction::make(),
