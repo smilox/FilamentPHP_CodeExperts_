@@ -66,7 +66,7 @@ class ProductResource extends Resource
             ->filters([
                 Filter::make('amount')
                     ->toggle()
-                    ->query(fn (Builder $builder) => $builder->where('amount','>',9))
+                    ->query(fn (Builder $query): Builder => $query->where('amount', '>', 9))
             ])
             ->actions([
                 Tables\Actions\EditAction::make(),
