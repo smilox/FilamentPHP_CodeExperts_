@@ -45,7 +45,7 @@ class ProductResource extends Resource
                 FileUpload::make('photo')
                         ->image()
                         ->directory('products'),
-                Select::make('categories')->relationship('categories','name')->multiple()
+                Select::make('categories')->relationship('categories','name')->multiple()->preload()
             ]);
     }
 

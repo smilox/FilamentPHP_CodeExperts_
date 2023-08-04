@@ -7,6 +7,7 @@ use App\Filament\Resources\UserResource\RelationManagers;
 use App\Models\User;
 use Filament\Facades\Filament;
 use Filament\Forms;
+use Filament\Forms\Components\Select;
 use Filament\Forms\Components\TextInput;
 use Filament\Resources\Form;
 use Filament\Resources\Resource;
@@ -29,6 +30,7 @@ class UserResource extends Resource
             ->schema([
                 TextInput::make('name')->required()->label('Nome'),
                 TextInput::make('email')->required()->email()->label('E-mail'),
+                Select::make('role')->relationship('roles', 'name')->multiple()->preload()
                 // TextInput::make('password')
                 //         ->password()
                 //         ->required()
